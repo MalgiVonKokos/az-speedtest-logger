@@ -1,0 +1,35 @@
+using System;
+using System.Globalization;
+using System.IO;
+using Microsoft.Extensions.Configuration;
+
+namespace SpeedTestLogger {
+    public class LoggerConfiguration {
+
+        public RegionInfo LoggerLocation { get; }
+        public string UserId {get; }
+
+        public int LoggerId {get; }
+        public LoggerConfiguration () {
+            var builder = new ConfigurationBuilder ()
+                .SetBasePath (Directory.GetCurrentDirectory ())
+                .AddJsonFile ("appsettings.json");
+
+            var configuration = builder.Build ();
+
+            var countryCode = configuration["loggerLocationCountryCode"];
+            LoggerLocation = new RegionInfo (countryCode);
+
+            var userId = configuration["userId"];
+            UserId = userId;
+
+            var loggerId = configuration["loggerId"];
+            LoggerId = Int32.Parse(loggerId);
+
+            Console.WriteLine ("Logger located in {0}", LoggerLocation.EnglishName);
+
+        }
+
+    }
+
+}
